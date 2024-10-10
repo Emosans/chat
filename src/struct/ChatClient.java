@@ -21,15 +21,26 @@ public class ChatClient {
                 e.printStackTrace();
             }
         }).start();
-
-        String input;
-        while (socket.isConnected()) {
-            System.out.println("Enter a message");
-            input = consoleInput.readLine();
-            out.println(input); // send user input to server
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        socket.close();
+        new Thread(() -> {
+            String input;
+            try {
+                while (socket.isConnected()) {
+                    System.out.println("Enter a message");
+                    input = consoleInput.readLine();
+                    out.println(input); // send user input to server
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        
     }
 
 }
