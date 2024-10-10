@@ -8,6 +8,9 @@ public class ChatServer{
     // create a function to broadcast message
     // create a server to remove the client
 
+    
+
+
     private static Set<ClientHandler> clientHandlers = Collections.synchronizedSet(new HashSet<>()); // store clients
 
     public static void main(String[] args) throws IOException{
@@ -18,6 +21,7 @@ public class ChatServer{
             Socket socket = serverSocket.accept();
             System.out.println("connected");
             ClientHandler clientHandler = new ClientHandler(socket);
+            addClient(clientHandler);
             new Thread(clientHandler).start();
         }
     }
@@ -25,7 +29,7 @@ public class ChatServer{
     // create a function to broadcast a message
     public static synchronized void broadcast(String message,ClientHandler excludeCurrent){
         // System.out.println(message);
-        clientHandlers.add(excludeCurrent);
+        // clientHandlers.add(excludeCurrent);
             for(ClientHandler client : clientHandlers){
                 if (!client.equals(excludeCurrent)) {
                 try {
@@ -38,7 +42,13 @@ public class ChatServer{
                 }
             }
             // excludeCurrent.sendMessage(message);
-}
+    }
+
+    // add a client
+    public static synchronized void addClient(ClientHandler client){
+        clientHandlers.add(client);
+        broadcast("User "+client.username+" has joined the chat!", client);
+    }
 
     // create a function to remove the client
     public static synchronized void removeClient(ClientHandler client){

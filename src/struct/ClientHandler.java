@@ -7,7 +7,7 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    protected String username;
+    public String username;
     // private Set<ClientHandler> clientHandlers;
 
     // create a constructor to intialise private variables
@@ -24,7 +24,8 @@ public class ClientHandler implements Runnable {
         try{
             out.println("Enter username");
             username=in.readLine();
-            ChatServer.broadcast("User "+username+" has joined!",this);
+            // ChatServer.broadcast("User "+username+" has joined!",this);
+            ChatServer.addClient(this);
             try{
                 while((message =in.readLine()) != null){
                     System.out.println("Recieved from client "+username+ " : "+message);
